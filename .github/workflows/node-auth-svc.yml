@@ -11,7 +11,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: test
+    env:
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      OMDB_API_KEY: ${{ secrets.OMDB_API_KEY }}
+      TEST_MONGO_URL: ${{ secrets.TEST_MONGO_URL }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -27,7 +30,7 @@ jobs:
           restore-keys: v1-npm-deps-
 
       - name: "Display env variables"
-        run: echo "secret $JWT_SECRET"
+        run: echo ${{ secrets.JWT_SECRET }}
 
       - name: Setup redis
         uses: supercharge/redis-github-action@1.2.0
