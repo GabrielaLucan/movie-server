@@ -1,7 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
+import redis from 'redis';
 import { authFactory, AuthError } from "./services/auth.js";
-import setupRoutes from './config/routes.js'
+import setupRoutes from './routes.js'
 import initMongoose from "./config/mongoose.js";
 import { JWT_SECRET, OMDB_API_KEY } from './config/index.js';
 
@@ -15,6 +16,7 @@ if (!OMDB_API_KEY) {
   throw new Error("Missing OMDB_API_KEY env var. Set it and restart the server");
 }
 
+export const redisClient = redis.createClient();
 const auth = authFactory(JWT_SECRET);
 const app = express();
 
@@ -55,12 +57,19 @@ app.use((error, _, res, __) => {
 
 initMongoose()
   .then(() => {
-    console.log('Connected to database.');
+    console.log('Connected to database');
 
-    app.listen(PORT, () => {
-      console.log(`auth svc running at port ${PORT}`);
-    });
+    redisClient.connect()
+      .then(() => {
+        console.log('Connected to redis');
 
+        app.listen(PORT, () => {
+          console.log(`Server running at port ${PORT}`);
+        });
+      })
+      .catch((redisErr) => {
+        console.log('error when connection to redis: ', redisErr);
+      });
   })
   .catch((mongoErr) => {
     console.log('error when connection to database: ', mongoErr);

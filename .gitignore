@@ -1,2 +1,5 @@
-node-modules
+# Node artifact files
+node_modules/
+
+# Env file
 .env

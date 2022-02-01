@@ -8,15 +8,10 @@ chai.use(chaiHttp);
 const auth = authFactory(JWT_SECRET);
 
 describe('#createMovie', async () => {
-    let tokenBasicUser;
     let tokenPremiumUser;
-    let basicUser;
     let premiumUser;
 
     before(async () => {
-        basicUser = users.find((u) => u.username === 'basic-thomas');
-        tokenBasicUser = auth(basicUser.username, basicUser.password);
-
         premiumUser = users.find((u) => u.username === 'premium-jim');
         tokenPremiumUser = auth(premiumUser.username, premiumUser.password);
     });
@@ -41,7 +36,7 @@ describe('#createMovie', async () => {
     it('It should throw error, title is not defined', async () => {
         const res = await chai.request(app)
             .post(`/movies`)
-            .set('Authorization', `Bearer ${tokenBasicUser}`);
+            .set('Authorization', `Bearer ${tokenPremiumUser}`);
 
         expect(res).to.have.status(401);
         const errors = res.body.errors;
@@ -54,7 +49,7 @@ describe('#createMovie', async () => {
         const res = await chai.request(app)
             .post(`/movies`)
             .send({ title })
-            .set('Authorization', `Bearer ${tokenBasicUser}`);
+            .set('Authorization', `Bearer ${tokenPremiumUser}`);
 
         expect(res).to.have.status(200);
         const { movie } = res.body;
@@ -66,12 +61,12 @@ describe('#createMovie', async () => {
         expect(movie.title).to.equal(title);
     });
 
-    it('Should successfully create movie, as an basic user', async () => {
+    it('Should successfully create movie', async () => {
         const title = 'Avatar';
         const res = await chai.request(app)
             .post(`/movies`)
             .send({ title })
-            .set('Authorization', `Bearer ${tokenBasicUser}`);
+            .set('Authorization', `Bearer ${tokenPremiumUser}`);
 
         expect(res).to.have.status(200);
         const { movie } = res.body;
@@ -82,37 +77,14 @@ describe('#createMovie', async () => {
         expect(movie.director).to.equal('James Cameron');
         expect(movie.title).to.equal(title);
     });
-
-
-    it('Should successfully create movie, as an premium user', async () => {
-        const title = 'Outlander';
-        const res = await chai.request(app)
-            .post(`/movies`)
-            .send({ title })
-            .set('Authorization', `Bearer ${tokenPremiumUser}`);
-
-        expect(res).to.have.status(200);
-        const { movie } = res.body;
-
-        expect(movie).to.not.equal(undefined);
-        expect(movie.released).to.equal('09 Aug 2014');
-        expect(movie.genre).to.equal('Drama, Fantasy, Romance');
-        expect(movie.director).to.not.equal(undefined);
-        expect(movie.title).to.equal(title);
-    });
 });
 
 
 describe('#listMovies', async () => {
-    let tokenBasicUser;
     let tokenPremiumUser;
-    let basicUser;
     let premiumUser;
 
     before(async () => {
-        basicUser = users.find((u) => u.username === 'basic-thomas');
-        tokenBasicUser = auth(basicUser.username, basicUser.password);
-
         premiumUser = users.find((u) => u.username === 'premium-jim');
         tokenPremiumUser = auth(premiumUser.username, premiumUser.password);
     });
@@ -134,25 +106,10 @@ describe('#listMovies', async () => {
         expect(res.text).to.be.eq('Invalid Token');
     });
 
-    it('Should successfully list movies, as an basic user', async () => {
-        const res = await chai.request(app)
-            .get(`/movies`)
-            .set('Authorization', `Bearer ${tokenBasicUser}`);
-
-        expect(res).to.have.status(200);
-        const { movies } = res.body;
-        expect(movies).to.be.an('array');
-        expect(movies?.length).to.be.gte(3);
-
-        movies?.forEach(movie => {
-            expect(movie.title).to.not.equal(undefined);
-        })
-    });
-
     it('Should successfully create movie, as an premium user', async () => {
         const res = await chai.request(app)
             .get(`/movies`)
-            .set('Authorization', `Bearer ${tokenBasicUser}`);
+            .set('Authorization', `Bearer ${tokenPremiumUser}`);
 
         expect(res).to.have.status(200);
         const { movies } = res.body;
