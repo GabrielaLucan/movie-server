@@ -29,15 +29,12 @@ jobs:
           key: v1-npm-deps-${{ hashFiles('**/package-lock.json') }}
           restore-keys: v1-npm-deps-
 
-      - name: "Display env variables"
-        run: echo ${{ secrets.JWT_SECRET }}
-
       - name: Setup redis
         uses: supercharge/redis-github-action@1.2.0
         with:
           redis-version: 6
 
-      - name: Install redis cli # so we can test the server
+      - name: Install redis cli
         run: sudo apt-get install -y redis-tools
 
       - name: Verify that redis is up

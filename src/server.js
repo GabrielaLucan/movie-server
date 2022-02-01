@@ -16,7 +16,9 @@ if (!OMDB_API_KEY) {
   throw new Error("Missing OMDB_API_KEY env var. Set it and restart the server");
 }
 
-export const redisClient = redis.createClient();
+export const redisClient = redis.createClient()
+
+
 const auth = authFactory(JWT_SECRET);
 const app = express();
 

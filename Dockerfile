@@ -1,11 +1,18 @@
-FROM node:14.15-alpine
+#  Dockerfile for Netguru Backend
 
-WORKDIR /app
+FROM node:14-alpine
 
-COPY ./package.json ./package-lock.json ./
+# Create App Directory
+WORKDIR /usr/src/app
+
+# Install Dependencies
+COPY package*.json ./
+
 RUN npm install
 
-RUN mkdir ./src
-COPY ./src ./src
+# Copy app source code
+COPY . .
 
-CMD ["node", "./src/server.js"]
+EXPOSE 3000
+
+CMD ["npm", "start"]
