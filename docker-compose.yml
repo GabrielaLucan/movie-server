@@ -1,35 +1,8 @@
-version: '3.7'
-
+version: '3'
 services:
-  nodeserver:
-    build: ./
-    volumes:
-      - redis_data:/data
-    depends_on:
-      - redis
-    networks:
-      - default
-    env_file: .env
+  redis-server: 
+    image: 'redis'
+  node-app:
+    build: .
     ports:
-      - 3000:3000
-    environment:
-      - NODE_ENV=development
-    command:
-      sh -c 'npm start'
-
-  redis:
-    image: redis
-    expose:
-      - 6379
-    networks:
-      - default
-    command: ["redis-server", "--bind", "0.0.0.0", "--port", "6379"]
-    volumes:
-      - redis_data:/data
-
-volumes:
-  redis_data:
-    driver: local
-
-networks:
-  default:
+      - "3000:3000"

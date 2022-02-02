@@ -90,14 +90,22 @@ Response
 ## Run locally
 
 1. Clone this repository
-1. Run from root dir
+2.1. Run with docker compose
 
 ```
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 To stop the server run
 
 ```
 docker-compose down
+```
+
+2.2. Run in terminal. Keep in mind to start redis-server on another terminal
+
+```
+npm install
+npm start
+
 ```

@@ -16,7 +16,14 @@ if (!OMDB_API_KEY) {
   throw new Error("Missing OMDB_API_KEY env var. Set it and restart the server");
 }
 
-export const redisClient = redis.createClient()
+
+// export const redisClient = redis.createClient()
+export const redisClient = redis.createClient({
+  host: 'redis-server',
+  port: 6379
+})
+
+// export const redisClient = redis.createClient({ host: 'redis' });
 
 
 const auth = authFactory(JWT_SECRET);
@@ -61,17 +68,10 @@ initMongoose()
   .then(() => {
     console.log('Connected to database');
 
-    redisClient.connect()
-      .then(() => {
-        console.log('Connected to redis');
+    app.listen(PORT, () => {
+      console.log(`Server running at port ${PORT}`);
+    });
 
-        app.listen(PORT, () => {
-          console.log(`Server running at port ${PORT}`);
-        });
-      })
-      .catch((redisErr) => {
-        console.log('error when connection to redis: ', redisErr);
-      });
   })
   .catch((mongoErr) => {
     console.log('error when connection to database: ', mongoErr);
