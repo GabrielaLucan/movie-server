@@ -15,6 +15,11 @@ jobs:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       OMDB_API_KEY: ${{ secrets.OMDB_API_KEY }}
       TEST_MONGO_URL: ${{ secrets.TEST_MONGO_URL }}
+    services:
+      redis-server:
+        image: redis
+        ports:
+          - 6379/tcp
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
