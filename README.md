@@ -4,7 +4,7 @@ This is a repository which holds Netguru Test REST APIs.
 * [Usage](#usage)
 * [Technologies](#technologies)
 * [Setup](#setup)
-* [Example request](#Example request)
+* [Example request](#Example_request)
 
 
 
