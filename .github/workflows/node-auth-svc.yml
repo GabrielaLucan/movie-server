@@ -33,6 +33,7 @@ jobs:
         uses: supercharge/redis-github-action@1.2.0
         with:
           redis-version: 6
+          redis-container-name: redis-server
 
       - name: Install redis cli
         run: sudo apt-get install -y redis-tools
