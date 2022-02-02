@@ -32,14 +32,8 @@ jobs:
       - name: Setup redis
         uses: supercharge/redis-github-action@1.4.0
         with:
-          redis-version: 6
+          redis-version: 4
           redis-container-name: redis-server
-
-      - name: Install redis cli
-        run: sudo apt-get install -y redis-tools
-
-      - name: Verify that redis is up
-        run: redis-cli ping
 
       - run: npm ci
 
