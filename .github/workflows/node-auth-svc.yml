@@ -34,12 +34,6 @@ jobs:
           key: v1-npm-deps-${{ hashFiles('**/package-lock.json') }}
           restore-keys: v1-npm-deps-
 
-      - name: Setup redis
-        uses: supercharge/redis-github-action@1.4.0
-        with:
-          redis-version: 4
-          redis-container-name: redis-server
-
       - run: npm ci
 
       - run: npm run test
